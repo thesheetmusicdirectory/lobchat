@@ -30,3 +30,14 @@ dist/
 *.sublime-workspace
 # Ignora file di configurazione specifici dell'IDE
 ../../../*
+# Ignore files and directories outside the project
+/.bash_sessions/
+/.gradle/
+/.android/
+/.DS_Store
+/.npm/
+/.config/
+/cache/
+/VirtualBox VMs/
+/package-lock.json
+/package.json
