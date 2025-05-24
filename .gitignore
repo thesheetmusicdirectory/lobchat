@@ -1,0 +1,30 @@
+# Ignora chiavi ADB
+.android/adbkey
+.android/adbkey.pub
+
+# Ignora la directory node_modules
+node_modules/
+
+# Ignora file di log
+*.log
+
+# Ignora build e file temporanei
+dist/
+*.tmp
+
+# Ignora file di sistema macOS
+.DS_Store
+
+# Ignora file di configurazione IDE
+.vscode/
+.idea/
+
+# Ignora file di ambiente
+.env
+.env.local
+# Ignora file e directory fuori dal progetto
+../../../*
+# Ignora file di configurazione specifici dell'utente
+*.user
+# Ignora file di configurazione specifici dell'IDE
+*.sublime-workspace
