@@ -28,3 +28,5 @@ dist/
 *.user
 # Ignora file di configurazione specifici dell'IDE
 *.sublime-workspace
+# Ignora file di configurazione specifici dell'IDE
+../../../*
