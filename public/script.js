@@ -88,3 +88,18 @@ if (picker) {
     input.focus();
   });
 }
+const emojiBtn = document.getElementById('emoji-button');
+const emojiPicker = document.getElementById('emoji-picker');
+const messageInput = document.getElementById('message-input');
+
+// Toggle emoji picker
+emojiBtn.addEventListener('click', () => {
+  emojiPicker.style.display = emojiPicker.style.display === 'none' ? 'block' : 'none';
+});
+
+// Insert emoji into input
+emojiPicker.addEventListener('emoji-click', (event) => {
+  const emoji = event.detail.unicode;
+  messageInput.value += emoji;
+  emojiPicker.style.display = 'none';
+});

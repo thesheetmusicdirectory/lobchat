@@ -61,11 +61,15 @@
 
   <div id="chatDiv">
     <div id="messages"></div>
-    <form id="inputForm">
-      <input type="text" id="textInput" placeholder="Type a message..." required autocomplete="off" />
-      <button type="submit">Send</button>
-      <emoji-picker id="emoji-picker"></emoji-picker>
+    <form id="message-form">
+      <div id="input-wrapper">
+        <input id="message-input" type="text" placeholder="Type a message..." autocomplete="off" />
+        <button type="button" id="emoji-button">😊</button>
+        <button type="submit">Send</button>
+      </div>
+      <emoji-picker id="emoji-picker" style="display: none; position: absolute; bottom: 60px; right: 10px; z-index: 10;"></emoji-picker>
     </form>
+
   </div>
 
   <script>
