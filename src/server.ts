@@ -4,7 +4,7 @@ import http from 'http';
 import { Server } from 'socket.io';
 import path from 'path';
 import routes from './routes';
-
+import { clearMessages } from './controllers/chatController';
 dotenv.config();
 
 const app = express();
@@ -35,3 +35,6 @@ io.on('connection', (socket) => {
 server.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port}`);
 });
+
+// ✅ Clear messages every 30 minutes (1800000 ms)
+setInterval(clearMessages, 30 * 60 * 1000);

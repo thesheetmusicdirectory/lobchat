@@ -17,3 +17,8 @@ export const postMessage = (req: Request, res: Response): void => {
   messages.push({ user, text });
   res.status(201).json({ message: 'Message added' });
 };
+// ✅ Add this function
+export const clearMessages = () => {
+  messages = [];
+  console.log('🧹 Chat messages cleared');
+};
