@@ -29,4 +29,3 @@ node_modules/
 ../../../*
 # Ignore files and directories outside the project
 /VirtualBox VMs/
-.DS_Store
