@@ -1,7 +1,7 @@
 * {
     box-sizing: border-box;
   }
-  
+
   body {
     margin: 0;
     font-family: system-ui, sans-serif;
@@ -10,14 +10,14 @@
     flex-direction: column;
     height: 100vh;
   }
-  
+
   header {
     background: #2c3e50;
     color: white;
     padding: 1rem;
     text-align: center;
   }
-  
+
   #chat-container {
     flex: 1;
     display: flex;
@@ -25,7 +25,7 @@
     padding: 0.5rem;
     overflow-y: auto;
   }
-  
+
   .message {
     padding: 0.6rem;
     margin: 0.4rem 0;
@@ -33,17 +33,17 @@
     max-width: 80%;
     word-wrap: break-word;
   }
-  
+
   .message.self {
     background: #d1ecf1;
     align-self: flex-end;
   }
-  
+
   .message.other {
     background: #ffffff;
     align-self: flex-start;
   }
-  
+
   .system {
     font-style: italic;
     color: gray;
@@ -57,7 +57,7 @@
     margin-top: 2px;
   }
 
-  
+
 #message-form {
   display: flex;
   gap: 8px;
@@ -75,11 +75,11 @@
   cursor: pointer;
 }
 
-  
+
   #form input[type="text"] {
     flex: 1;
   }
-  
+
   #form button {
     background: #2c3e50;
     color: white;
