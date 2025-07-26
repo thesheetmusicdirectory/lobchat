@@ -13,7 +13,7 @@ messages.appendChild(typingDiv);
 
 let typingTimeout;
 
-// Function to generate pastel color based on username
+// Generate pastel color per user
 function getColor(name) {
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
@@ -23,7 +23,7 @@ function getColor(name) {
   return `hsl(${hue}, 70%, 85%)`;
 }
 
-// Function to add a message to the chat
+// Add message to DOM
 function addMessage({ user, text, time }) {
   const msgDiv = document.createElement('div');
   msgDiv.classList.add('message');
@@ -36,24 +36,26 @@ function addMessage({ user, text, time }) {
   messages.scrollTop = messages.scrollHeight;
 }
 
-// Send message
+// Handle message send
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   const message = input.value.trim();
-  if (message) {
-    const now = new Date();
-    const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    socket.emit('chat message', {
-      user: username,
-      text: message,
-      time
-    });
-    input.value = '';
-    socket.emit('stop typing', username);
-  }
+  if (!message) return;
+
+  const now = new Date();
+  const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  socket.emit('chat message', {
+    user: username,
+    text: message,
+    time
+  });
+
+  input.value = '';
+  socket.emit('stop typing', username);
 });
 
-// Typing events
+// Typing indicator logic
 input.addEventListener('input', () => {
   socket.emit('typing', username);
   clearTimeout(typingTimeout);
@@ -62,12 +64,12 @@ input.addEventListener('input', () => {
   }, 1500);
 });
 
-// Receive chat message
+// Receive and display messages
 socket.on('chat message', (msg) => {
   addMessage(msg);
 });
 
-// Show typing indicator
+// Show "typing" feedback
 socket.on('typing', (user) => {
   if (user !== username) {
     typingDiv.textContent = `${user} is typing...`;
@@ -79,13 +81,3 @@ socket.on('stop typing', (user) => {
     typingDiv.textContent = '';
   }
 });
-
-// Optional: Emoji picker support
-const picker = document.querySelector('emoji-picker');
-if (picker) {
-  picker.addEventListener('emoji-click', event => {
-    input.value += event.detail.unicode;
-    input.focus();
-  });
-}
-
