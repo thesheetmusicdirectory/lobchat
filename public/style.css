@@ -49,6 +49,14 @@
     color: gray;
     text-align: center;
   }
+
+  .timestamp {
+    display: block;
+    font-size: 0.7em;
+    color: gray;
+    margin-top: 2px;
+  }
+
   
   #form {
     display: flex;

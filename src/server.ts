@@ -32,6 +32,15 @@ io.on('connection', (socket) => {
   });
 });
 
+socket.on('typing', (username) => {
+  socket.broadcast.emit('typing', username);
+});
+
+socket.on('stop typing', (username) => {
+  socket.broadcast.emit('stop typing', username);
+});
+
+
 server.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port}`);
 });
