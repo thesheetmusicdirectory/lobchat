@@ -1,19 +1,25 @@
 const socket = io();
-let username = prompt('Enter your name:');
-if (!username) username = 'Anonymous';
+let username = '';
+
+window.addEventListener('load', () => {
+  while (!username) {
+    username = prompt('Enter your username:');
+    if (!username) alert('Username is required!');
+  }
+});
 
 const form = document.getElementById('message-form');
 const input = document.getElementById('message-input');
 const messages = document.getElementById('chat-container');
 
-// Typing indicator setup
+// Typing indicator element
 const typingDiv = document.createElement('div');
 typingDiv.id = 'typing-indicator';
 messages.appendChild(typingDiv);
 
-let typingTimeout;
+let typingTimeout = null;
 
-// Generate pastel color per user
+// Generate pastel color based on username
 function getColor(name) {
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
@@ -23,22 +29,23 @@ function getColor(name) {
   return `hsl(${hue}, 70%, 85%)`;
 }
 
-// Add message to DOM
+// Add chat message
 function addMessage({ user, text, time }) {
   const msgDiv = document.createElement('div');
   msgDiv.classList.add('message');
   msgDiv.style.backgroundColor = getColor(user);
   msgDiv.innerHTML = `
-    <strong>${user}</strong>: ${text}
+    <div><strong>${user}</strong>: ${text}</div>
     <div class="timestamp">${time}</div>
   `;
   messages.appendChild(msgDiv);
   messages.scrollTop = messages.scrollHeight;
 }
 
-// Handle message send
+// Send message
 form.addEventListener('submit', (e) => {
   e.preventDefault();
+
   const message = input.value.trim();
   if (!message) return;
 
@@ -55,7 +62,7 @@ form.addEventListener('submit', (e) => {
   socket.emit('stop typing', username);
 });
 
-// Typing indicator logic
+// Typing events
 input.addEventListener('input', () => {
   socket.emit('typing', username);
   clearTimeout(typingTimeout);
@@ -64,18 +71,19 @@ input.addEventListener('input', () => {
   }, 1500);
 });
 
-// Receive and display messages
+// Receive new message
 socket.on('chat message', (msg) => {
   addMessage(msg);
 });
 
-// Show "typing" feedback
+// Show typing
 socket.on('typing', (user) => {
   if (user !== username) {
     typingDiv.textContent = `${user} is typing...`;
   }
 });
 
+// Hide typing
 socket.on('stop typing', (user) => {
   if (user !== username) {
     typingDiv.textContent = '';
