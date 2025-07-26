@@ -22,8 +22,18 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   console.log('🟢 User connected:', socket.id);
 
+  // ✅ Typing event listener
+  socket.on('typing', (username: string) => {
+    socket.broadcast.emit('typing', username);
+  });
+
+  // ✅ Stop typing
+  socket.on('stop typing', (username: string) => {
+    socket.broadcast.emit('stop typing', username);
+  });
+
+  // ✅ Chat messages
   socket.on('chat message', (msg) => {
-    console.log('📨 Message:', msg);
     io.emit('chat message', msg);
   });
 
@@ -32,13 +42,6 @@ io.on('connection', (socket) => {
   });
 });
 
-socket.on('typing', (username) => {
-  socket.broadcast.emit('typing', username);
-});
-
-socket.on('stop typing', (username) => {
-  socket.broadcast.emit('stop typing', username);
-});
 
 
 server.listen(port, () => {
