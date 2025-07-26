@@ -1,3 +1,4 @@
+// chatRoutes.ts
 import express from 'express';
 import { getMessages, postMessage } from '../controllers/chatController';
 

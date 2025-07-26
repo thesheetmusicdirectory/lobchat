@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>LobChat</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 1rem; }
+    #chat { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 0.5rem; margin-bottom: 1rem; }
+    input, textarea { width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+  <h1>LobChat</h1>
+  <div id="chat"></div>
+  <textarea id="message" placeholder="Type a message..."></textarea>
+  <button onclick="sendMessage()">Send</button>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    const socket = io();
+
+    const chat = document.getElementById('chat');
+    const messageBox = document.getElementById('message');
+
+    socket.on('chat message', msg => {
+      const msgEl = document.createElement('div');
+      msgEl.textContent = msg;
+      chat.appendChild(msgEl);
+      chat.scrollTop = chat.scrollHeight;
+    });
+
+    function sendMessage() {
+      const msg = messageBox.value.trim();
+      if (!msg) return;
+      socket.emit('chat message', msg);
+      messageBox.value = '';
+    }
+  </script>
+</body>
+</html>
