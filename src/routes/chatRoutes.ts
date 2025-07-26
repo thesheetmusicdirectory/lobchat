@@ -1,4 +1,4 @@
-// chatRoutes.ts
+// src/routes/chatRoutes.ts
 import express from 'express';
 import { getMessages, postMessage } from '../controllers/chatController';
 
@@ -8,3 +8,4 @@ router.get('/messages', getMessages);
 router.post('/messages', postMessage);
 
 export default router;
+

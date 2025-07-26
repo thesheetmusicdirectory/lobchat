@@ -1,8 +1,10 @@
+// src/controllers/chatController.ts
 import { Request, Response } from 'express';
 
 let messages: { user: string; text: string }[] = [];
 
 export const getMessages = (req: Request, res: Response): void => {
+  console.log('GET /messages');
   res.json(messages);
 };
 

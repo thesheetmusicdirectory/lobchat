@@ -1,14 +1,9 @@
+// src/routes/index.ts
 import express from 'express';
-import chatRoutes from './chatRoutes'; // Import your chat routes
+import chatRoutes from './chatRoutes';
 
 const router = express.Router();
 
-// Use the chat routes under the `/api/chat` path
-router.use('/api/chat', chatRoutes);
-
-// Example route for testing
-router.get('/', (req, res) => {
-  res.send('Welcome to LobChat!');
-});
+router.use('/', chatRoutes); // Mount at root (so /messages works)
 
 export default router;

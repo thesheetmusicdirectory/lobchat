@@ -3,37 +3,115 @@
 <head>
   <title>LobChat</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 1rem; }
-    #chat { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 0.5rem; margin-bottom: 1rem; }
-    input, textarea { width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; }
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    #messages {
+      border: 1px solid #ccc;
+      padding: 10px;
+      height: 300px;
+      overflow-y: scroll;
+      background: #f9f9f9;
+    }
+
+    #inputForm,
+    #loginForm {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
+
+    input, button {
+      padding: 8px;
+      font-size: 1em;
+    }
+
+    #chatDiv {
+      display: none;
+    }
+
+    .message {
+      margin: 5px 0;
+    }
+
+    .message strong {
+      color: #3366cc;
+    }
   </style>
 </head>
 <body>
-  <h1>LobChat</h1>
-  <div id="chat"></div>
-  <textarea id="message" placeholder="Type a message..."></textarea>
-  <button onclick="sendMessage()">Send</button>
+  <h1>Welcome to LobChat</h1>
 
-  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <div id="loginDiv">
+    <form id="loginForm">
+      <input type="text" id="usernameInput" placeholder="Enter your username" required />
+      <button type="submit">Join Chat</button>
+    </form>
+  </div>
+
+  <div id="chatDiv">
+    <div id="messages"></div>
+    <form id="inputForm">
+      <input type="text" id="textInput" placeholder="Type a message..." required autocomplete="off" />
+      <button type="submit">Send</button>
+    </form>
+  </div>
+
   <script>
-    const socket = io();
+    const loginDiv = document.getElementById('loginDiv');
+    const chatDiv = document.getElementById('chatDiv');
+    const loginForm = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('usernameInput');
+    const messagesDiv = document.getElementById('messages');
+    const inputForm = document.getElementById('inputForm');
+    const textInput = document.getElementById('textInput');
 
-    const chat = document.getElementById('chat');
-    const messageBox = document.getElementById('message');
+    let username = '';
 
-    socket.on('chat message', msg => {
-      const msgEl = document.createElement('div');
-      msgEl.textContent = msg;
-      chat.appendChild(msgEl);
-      chat.scrollTop = chat.scrollHeight;
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      username = usernameInput.value.trim();
+      if (!username) return;
+      loginDiv.style.display = 'none';
+      chatDiv.style.display = 'block';
+      loadMessages();
     });
 
-    function sendMessage() {
-      const msg = messageBox.value.trim();
-      if (!msg) return;
-      socket.emit('chat message', msg);
-      messageBox.value = '';
+    async function loadMessages() {
+      try {
+        const res = await fetch('/messages');
+        const messages = await res.json();
+        messagesDiv.innerHTML = messages.map(m => `
+          <div class="message"><strong>${m.user}:</strong> ${m.text}</div>
+        `).join('');
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      } catch (err) {
+        console.error('Failed to load messages:', err);
+      }
     }
+
+    inputForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const text = textInput.value.trim();
+      if (!text) return;
+      await fetch('/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user: username, text })
+      });
+      textInput.value = '';
+      await loadMessages();
+    });
+
+    setInterval(() => {
+      if (chatDiv.style.display === 'block') {
+        loadMessages();
+      }
+    }, 3000);
   </script>
 </body>
 </html>
