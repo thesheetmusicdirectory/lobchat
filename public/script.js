@@ -35,12 +35,13 @@ function addMessage({ user, text, time }) {
   msgDiv.classList.add('message');
   msgDiv.style.backgroundColor = getColor(user);
   msgDiv.innerHTML = `
-    <div><strong>${user}</strong>: ${text}</div>
+    <strong>${user}</strong>: ${text}
     <div class="timestamp">${time}</div>
   `;
   messages.appendChild(msgDiv);
   messages.scrollTop = messages.scrollHeight;
 }
+
 
 // Send message
 form.addEventListener('submit', (e) => {
@@ -87,5 +88,23 @@ socket.on('typing', (user) => {
 socket.on('stop typing', (user) => {
   if (user !== username) {
     typingDiv.textContent = '';
+  }
+});
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const message = input.value.trim();
+  if (message) {
+    const now = new Date();
+    const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    socket.emit('chat message', {
+      user: username,
+      text: message,
+      time: time,
+    });
+
+    input.value = '';
+    socket.emit('stop typing', username);
   }
 });

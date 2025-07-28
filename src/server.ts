@@ -22,6 +22,13 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   console.log('🟢 User connected:', socket.id);
 
+  // Define message structure
+  interface ChatMessage {
+    user: string;
+    text: string;
+    time?: string;
+  }
+
   // ✅ Typing event listener
   socket.on('typing', (username: string) => {
     socket.broadcast.emit('typing', username);
@@ -32,15 +39,20 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('stop typing', username);
   });
 
-  // ✅ Chat messages
-  socket.on('chat message', (msg) => {
+  // ✅ Chat messages with timestamp
+  socket.on('chat message', (msg: ChatMessage) => {
+    const now = new Date();
+    msg.time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     io.emit('chat message', msg);
   });
 
+  // ✅ Handle disconnect
   socket.on('disconnect', () => {
     console.log('🔴 User disconnected:', socket.id);
   });
 });
+
+
 
 
 

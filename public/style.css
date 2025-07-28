@@ -76,4 +76,9 @@
     border: none;
   }
 
-  
+  .timestamp {
+  font-size: 0.75rem;
+  color: #666;
+  margin-left: 0.5rem;
+  display: inline-block;
+}
